@@ -35,7 +35,7 @@
     "@edx/frontend-component-header": "^2.4.3",
     "@edx/frontend-enterprise-utils": "1.1.1",
     "@edx/frontend-lib-special-exams": "1.14.1",
-    "@edx/frontend-platform": "github:eduNEXT/frontend-platform#and/make_mfes_multitenant",
+    "@edx/frontend-platform": "git+https://git@github.com/eduNEXT/frontend-platform.git#and/make_mfes_multitenant",
     "@edx/paragon": "16.19.0",
     "@fortawesome/fontawesome-svg-core": "1.2.36",
     "@fortawesome/free-brands-svg-icons": "5.15.4",
