@@ -36,7 +36,7 @@
     "@edx/frontend-component-header": "^2.4.3",
     "@edx/frontend-enterprise-utils": "1.1.1",
     "@edx/frontend-lib-special-exams": "1.14.1",
-    "@edx/frontend-platform": "https://github.com/eduNEXT/frontend-platform/tarball/nelp-dist",
+    "@edx/frontend-platform": "npm:@johanedunext/frontend-platform@^1.0.1-semantically-released",
     "@edx/paragon": "16.19.0",
     "@fortawesome/fontawesome-svg-core": "1.2.36",
     "@fortawesome/free-brands-svg-icons": "5.15.4",
