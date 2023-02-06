@@ -3,7 +3,7 @@ import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
 import { logError } from '@edx/frontend-platform/logging';
 import { AppContext, ErrorPage } from '@edx/frontend-platform/react';
 import { getExamAccess, fetchExamAccess, isExam } from '@edx/frontend-lib-special-exams';
-import { Modal } from '@edx/paragon';
+import { ModalDialog, ActionRow } from '@edx/paragon';
 import PropTypes from 'prop-types';
 import React, {
   Suspense, useCallback, useContext, useEffect, useLayoutEffect, useState,
@@ -209,29 +209,45 @@ const Unit = ({
         <ErrorPage />
       )}
       {modalOptions.open && (
-        <Modal
-          body={(
+        <ModalDialog
+          title="My dialog"
+          isOpen
+          onClose={() => { setModalOptions({ open: false }); }}
+          isFullscreenOnMobile
+          // size="xl"
+          className="modal-lti"
+          hasCloseButton
+        >
+          <ModalDialog.Body>
             <>
               {modalOptions.body
-                ? <div className="unit-modal">{ modalOptions.body }</div>
+                ? <div className="unit-modal">{modalOptions.body}</div>
                 : (
-                  <iframe
-                    title={modalOptions.title}
-                    allow={IFRAME_FEATURE_POLICY}
-                    frameBorder="0"
-                    src={modalOptions.url}
-                    style={{
-                      width: '100%',
-                      height: '100vh',
-                    }}
-                  />
+                  <>
+                    <iframe
+                      title={modalOptions.title}
+                      allow={IFRAME_FEATURE_POLICY}
+                      frameBorder="0"
+                      src={modalOptions.url}
+                      style={{
+                        width: '100%',
+                        height: '100vh',
+                      }}
+                    />
+                  </>
                 )}
             </>
-          )}
-          onClose={() => { setModalOptions({ open: false }); }}
-          open
-          dialogClassName="modal-lti"
-        />
+          </ModalDialog.Body>
+
+          <ModalDialog.Footer>
+            <ActionRow>
+              <ModalDialog.CloseButton variant="primary">
+                Close
+              </ModalDialog.CloseButton>
+            </ActionRow>
+          </ModalDialog.Footer>
+        </ModalDialog>
+
       )}
       {!shouldDisplayHonorCode && !blockExamAccess && (
         <div className="unit-iframe-wrapper">
