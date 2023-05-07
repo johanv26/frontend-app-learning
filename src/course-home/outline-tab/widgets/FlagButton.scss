@@ -1,5 +1,5 @@
 @import "~@edx/brand/paragon/variables";
-@import "~@edx/paragon/scss/core/core";
+@import "~@edx/paragon/styles/scss/core/core";
 @import "~@edx/brand/paragon/overrides";
 
 .flag-button {
@@ -30,7 +30,7 @@
   margin: calc(var(--margin) * -1);
 }
 
-.flag-button-container > *  {
+.flag-button-container>* {
   flex-grow: 1;
   flex-basis: calc(var(--modifier) * 999);
   margin: var(--margin);

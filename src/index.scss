@@ -1,6 +1,6 @@
 @import "~@edx/brand/paragon/fonts";
 @import "~@edx/brand/paragon/variables";
-@import "~@edx/paragon/scss/core/core";
+@import "~@edx/paragon/styles/scss/core/core";
 @import "~@edx/brand/paragon/overrides";
 
 @import "~@edx/frontend-component-footer/dist/footer";
@@ -24,6 +24,7 @@
       top: 0.1em;
       height: 1.75rem;
       margin-right: 1rem;
+
       img {
         display: block;
         height: 100%;
@@ -185,7 +186,7 @@
       justify-content: flex-start;
       border-right: 0;
 
-      & + .btn {
+      &+.btn {
         border-top: 0;
       }
 
@@ -328,7 +329,7 @@
   // I don't like this.  We need to set a height of 100% on a div created by react-focus-on, a
   // package we use in our Modal.  That div has no class name or ID, so instead we're uniquely
   // identifying it by based on a unique attribute it has which its siblings don't share.
-  > div[data-focus-lock-disabled="false"] {
+  >div[data-focus-lock-disabled="false"] {
     height: 100%;
   }
 
@@ -350,6 +351,7 @@
   &.grades {
     overflow: hidden;
     max-height: 852px;
+
     @media screen and (min-width: 992px) {
       max-height: 920px;
     }
