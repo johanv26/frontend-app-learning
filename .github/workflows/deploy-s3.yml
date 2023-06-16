@@ -1,0 +1,62 @@
+name: MFE Cloudfront Deployment
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ secrets.NODE_VERSION }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ secrets.NODE_VERSION }}
+
+    - name: npm Install
+      run: npm install
+
+    - name: npm Build
+      run: npm build
+      env:
+        MFE_CONFIG_API_URL: ${{ secrets.MFE_CONFIG_API_URL }}
+        APP_ID: ${{ secrets.MFE_NAME }}  # learning
+
+    - name: Share artifact inside workflow
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ secrets.MFE_NAME }}-dist-artifact
+        path: dist
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      # get build artifact
+      - name: Get artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ secrets.MFE_NAME }}-dist-artifact
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+      # Copy build to s3
+      - name: Deploy to S3
+        run: |
+          aws s3 sync . $S3_BUCKET 
+        env:
+          S3_BUCKET: s3://${{ secrets.BUCKET_NAME }}
+        working-directory: ${{ secrets.MFE_NAME }}-dist-artifact
+
+      - name: Create Cloudfront Invalidation
+        run: |
+          DISTRIBUTION_ID=<distribution-id>
+          aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /*
+        working-directory: build-artifact
