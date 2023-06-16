@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - ednx-release/mango.nelp
 
 jobs:
   build:
@@ -11,24 +12,22 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ secrets.NODE_VERSION }}
+    - name: Use Node.js ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ secrets.NODE_VERSION }}
+        node-version: ${{ env.NODE_VERSION }}
 
     - name: npm Install
       run: npm install
 
-    - name: npm Build
+    - name: npm Build  # check env variables of repo.
       run: npm build
-      env:
-        MFE_CONFIG_API_URL: ${{ secrets.MFE_CONFIG_API_URL }}
-        APP_ID: ${{ secrets.MFE_NAME }}  # learning
+
 
     - name: Share artifact inside workflow
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ secrets.MFE_NAME }}-dist-artifact
+        name: ${{ env.MFE_NAME }}-dist-artifact
         path: dist
 
   deploy:
@@ -39,7 +38,7 @@ jobs:
       - name: Get artifact
         uses: actions/download-artifact@v3
         with:
-          name: ${{ secrets.MFE_NAME }}-dist-artifact
+          name: ${{ env.MFE_NAME }}-dist-artifact
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -50,13 +49,8 @@ jobs:
       # Copy build to s3
       - name: Deploy to S3
         run: |
-          aws s3 sync . $S3_BUCKET 
+          aws s3 sync . $S3_BUCKET
         env:
           S3_BUCKET: s3://${{ secrets.BUCKET_NAME }}
-        working-directory: ${{ secrets.MFE_NAME }}-dist-artifact
+        working-directory: ${{ env.MFE_NAME }}-dist-artifact
 
-      - name: Create Cloudfront Invalidation
-        run: |
-          DISTRIBUTION_ID=<distribution-id>
-          aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /*
-        working-directory: build-artifact
