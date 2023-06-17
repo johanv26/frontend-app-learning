@@ -22,8 +22,10 @@ jobs:
 
     - name: npm Build  # check env variables of repo.
       run: npm run build
-
-
+      env: 
+        ASSET_PATH: gatico.com
+    - name: print html
+      run: cat index.html
     - name: Share artifact inside workflow
       uses: actions/upload-artifact@v3
       with:
