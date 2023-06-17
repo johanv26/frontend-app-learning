@@ -39,7 +39,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{ vars.MFE_NAME }}-dist-artifact
-
+      - name: Display structure of downloaded files
+        run: ls -R
+      - name: Display structure of downloaded files
+        run: pwd 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
