@@ -19,12 +19,14 @@ jobs:
 
     - name: npm Install
       run: npm install
-
+    - name: print env vars
+      run: printenv
     - name: npm Build  # check env variables of repo.
       run: npm run build
       env:
         PUBLIC_PATH: /learning/
         APP_ID: learning
+        MFE_CONFIG_API_URL: ${{ vars.MFE_CONFIG_API_URL }}
     - name: print html
       run: cat dist/index.html
     - name: Share artifact inside workflow
