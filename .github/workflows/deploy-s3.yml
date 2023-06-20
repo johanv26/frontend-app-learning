@@ -25,6 +25,7 @@ jobs:
       run: npm run build
       env:
         PUBLIC_PATH: https://d20blt6w1kf9br.cloudfront.net/
+        ENABLE_NEW_RELIC: false
         APP_ID: learning
         MFE_CONFIG_API_URL: ${{ vars.MFE_CONFIG_API_URL }}
     - name: print html
