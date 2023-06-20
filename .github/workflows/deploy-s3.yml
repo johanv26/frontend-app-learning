@@ -28,6 +28,7 @@ jobs:
         ENABLE_NEW_RELIC: false
         APP_ID: learning
         MFE_CONFIG_API_URL: ${{ vars.MFE_CONFIG_API_URL }}
+        NODE_ENV: production
     - name: print html
       run: cat dist/index.html
     - name: Share artifact inside workflow
