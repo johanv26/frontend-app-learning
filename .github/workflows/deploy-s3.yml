@@ -24,7 +24,6 @@ jobs:
     - name: npm Build  # check env variables of repo.
       run: npm run build
       env:
-        PUBLIC_PATH_CDN: https://d20blt6w1kf9br.cloudfront.net/learning/
         PUBLIC_PATH: /learning/
         ENABLE_NEW_RELIC: false
         APP_ID: learning
