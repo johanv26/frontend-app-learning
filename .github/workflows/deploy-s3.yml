@@ -1,9 +1,10 @@
+env: 
+  asdasd: asdasd
 name: MFE Cloudfront Deployment
 
 on:
   push:
     branches:
-      - master
       - ednx-release/mango.nelp
 
 jobs:
