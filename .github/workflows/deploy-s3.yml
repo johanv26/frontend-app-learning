@@ -40,7 +40,7 @@ jobs:
         path: dist
 
   deploy:
-    environment: ${{ github.ref == 'refs/heads/main' && 'value_for_main_branch' || 'value_for_other_branches' }}
+    environment: ${{ github.ref_name == 'ednx-release/mango.nelp' && 'prod' || 'stage' }}
     runs-on: ubuntu-latest
     needs: build
     steps:
