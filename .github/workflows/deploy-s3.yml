@@ -8,7 +8,9 @@ on:
 
 jobs:
   build:
-    environment: ${{ github.ref_name == 'ednx-release/mango.nelp' && 'prod' || 'stage' }}
+    environment: 
+      name: ${{ github.ref_name == 'ednx-release/mango.nelp' && 'prod' || 'stage' }}
+      url: https://github.com
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
