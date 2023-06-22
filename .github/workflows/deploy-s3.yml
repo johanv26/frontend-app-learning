@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: print current environment
-      run: echo "using environment ${{ jobs.build.environment }} for build "
+      run: echo "using environment ${{ job.build.environment }} for build "
 
     - name: Use Node.js ${{ vars.NODE_VERSION }}
       uses: actions/setup-node@v3
@@ -74,7 +74,7 @@ jobs:
         with:
           name: ${{ vars.APP_ID }}-dist-artifact
       - name: print current environment
-        run: echo "using environment ${{ jobs.deployment.environment }} for deployment"
+        run: echo "using environment ${{ job.deployment.environment }} for deployment"
       - name: Display structure of downloaded files
         run: ls -R
       - name: Display structure of downloaded files
