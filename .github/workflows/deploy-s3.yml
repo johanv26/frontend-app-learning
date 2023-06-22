@@ -10,7 +10,6 @@ jobs:
   build:
     environment: 
       name: ${{ github.ref_name == 'ednx-release/mango.nelp' && 'prod' || 'stage' }}
-      url: https://githubnotextistdasdsad.com
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -41,8 +40,10 @@ jobs:
         name: ${{ vars.APP_ID }}-dist-artifact
         path: dist
 
-  deploy:
-    environment: ${{ github.ref_name == 'ednx-release/mango.nelp' && 'prod' || 'stage' }}
+  deployment:
+    environment: 
+      name: ${{ github.ref_name == 'ednx-release/mango.nelp' && 'prod' || 'stage' }}
+      url: https://githubnotextistdasdsad.com
     runs-on: ubuntu-latest
     needs: build
     steps:
