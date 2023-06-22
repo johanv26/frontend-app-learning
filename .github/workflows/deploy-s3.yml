@@ -1,4 +1,4 @@
-name: MFE S3 Bucket Deployment
+name: MFE S3 Bucket Deployment 🚀
 
 on:
   push:
@@ -12,17 +12,20 @@ jobs:
       name: ${{ github.ref_name == 'ednx-release/mango.nelp' && 'prod' || 'stage' }}
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: print current environment
-      run: echo "using environment ${{ job.build.environment }} for build "
-    - name: "Echo vars"
+    
+    - name: "Echo job  vars"
       env:
-        SECRETS_VARS: ${{ toJson(vars) }}
-      run: echo "$SECRETS_VARS"
+        JOB_VARS: ${{ toJson(vars) }}
+      run: echo "$JOB_VARS"  
+  
+    - name: checkout mfe repo
+      uses: actions/checkout@v3
+       
     - name: Use Node.js ${{ vars.NODE_VERSION }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ vars.NODE_VERSION }}
+        
     - name: Cache node modules
       id: cache-npm
       uses: actions/cache@v3
@@ -44,9 +47,7 @@ jobs:
   
     - name: npm Install
       run: npm install
-      
-    - name: print env vars
-      run: printenv
+          
     - name: npm Build  # check env variables of repo.
       run: npm run build
       env:
@@ -56,8 +57,10 @@ jobs:
         MFE_CONFIG_API_URL: ${{ vars.MFE_CONFIG_API_URL }}
         ENABLE_NEW_RELIC: false
         NODE_ENV: production
-    - name: print html
+        
+    - name: print generated html of mfe
       run: cat dist/index.html
+      
     - name: Share artifact inside workflow
       uses: actions/upload-artifact@v3
       with:
@@ -76,12 +79,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{ vars.APP_ID }}-dist-artifact
-      - name: print current environment
-        run: echo "using environment ${{ job.deployment.environment }} for deployment"
-      - name: Display structure of downloaded files
-        run: ls -R
-      - name: Display structure of downloaded files
-        run: pwd 
+          
+      - name: "Echo job  vars"
+        env:
+          JOB_VARS: ${{ toJson(vars) }}
+        run: echo "$JOB_VARS"
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -89,10 +92,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
-      # Copy build to s3
       - name: Deploy to S3
         run: |
           aws s3 sync . $S3_BUCKET
         env:
           S3_BUCKET: s3://${{ vars.BUCKET_NAME }}${{ vars.PUBLIC_PATH }} --delete
-      # working-directory: ${{ vars.APP_ID }}-dist-artifact
