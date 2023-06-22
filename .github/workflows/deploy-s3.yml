@@ -10,7 +10,7 @@ jobs:
   build:
     environment: 
       name: ${{ github.ref_name == 'ednx-release/mango.nelp' && 'prod' || 'stage' }}
-      url: https://github.com
+      url: https://githubnotextistdasdsad.com
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
