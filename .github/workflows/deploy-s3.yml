@@ -1,14 +1,14 @@
-env: 
-  asdasd: asdasd
-name: MFE Cloudfront Deployment
+name: MFE S3 Bucket Deployment
 
 on:
   push:
     branches:
       - ednx-release/mango.nelp
+      - "**ednx-rc**"
 
 jobs:
   build:
+    environment: ${{ github.ref_name == 'ednx-release/mango.nelp' && 'prod' || 'stage' }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -25,21 +25,22 @@ jobs:
     - name: npm Build  # check env variables of repo.
       run: npm run build
       env:
-        PUBLIC_PATH_CDN: https://d20blt6w1kf9br.cloudfront.net/learning/
-        PUBLIC_PATH: /learning/
-        ENABLE_NEW_RELIC: false
-        APP_ID: learning
+        PUBLIC_PATH_CDN: ${{ vars.PUBLIC_PATH_CDN }}
+        PUBLIC_PATH: ${{ vars.PUBLIC_PATH }}
+        APP_ID: ${{ vars.APP_ID }}
         MFE_CONFIG_API_URL: ${{ vars.MFE_CONFIG_API_URL }}
+        ENABLE_NEW_RELIC: false
         NODE_ENV: production
     - name: print html
       run: cat dist/index.html
     - name: Share artifact inside workflow
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ vars.MFE_NAME }}-dist-artifact
+        name: ${{ vars.APP_ID }}-dist-artifact
         path: dist
 
   deploy:
+    environment: ${{ github.ref == 'refs/heads/main' && 'value_for_main_branch' || 'value_for_other_branches' }}
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -47,7 +48,7 @@ jobs:
       - name: Get artifact
         uses: actions/download-artifact@v3
         with:
-          name: ${{ vars.MFE_NAME }}-dist-artifact
+          name: ${{ vars.APP_ID }}-dist-artifact
       - name: Display structure of downloaded files
         run: ls -R
       - name: Display structure of downloaded files
@@ -64,5 +65,5 @@ jobs:
         run: |
           aws s3 sync . $S3_BUCKET
         env:
-          S3_BUCKET: s3://${{ secrets.BUCKET_NAME }}/learning
-      # working-directory: ${{ vars.MFE_NAME }}-dist-artifact
+          S3_BUCKET: s3://${{ vars.BUCKET_NAME }}/learning
+      # working-directory: ${{ vars.APP_ID }}-dist-artifact
