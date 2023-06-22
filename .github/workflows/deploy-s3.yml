@@ -87,5 +87,5 @@ jobs:
         run: |
           aws s3 sync . $S3_BUCKET
         env:
-          S3_BUCKET: s3://${{ vars.BUCKET_NAME }}${{ vars.PUBLIC_PATH }}
+          S3_BUCKET: s3://${{ vars.BUCKET_NAME }}${{ vars.PUBLIC_PATH }} --delete
       # working-directory: ${{ vars.APP_ID }}-dist-artifact
